@@ -10,6 +10,13 @@
         values (#{memberEmail}, #{memberPassword}, #{memberName}, #{memberAge}, #{memberMobile})
     </insert>
 
+    <!-- 받은 결과를 가져오기 위해서 Select Type은 반드시 resultType이 있어야 한다 -->
+    <select id="login" parameterType="member" resultType="member">
+        select * from member_table
+         where memberEmail=#{memberEmail}
+           and memberPassword=#{memberPassword}
+    </select>
+
 </mapper>
 
 

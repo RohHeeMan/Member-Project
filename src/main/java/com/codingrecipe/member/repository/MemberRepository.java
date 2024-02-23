@@ -15,4 +15,11 @@ public class MemberRepository {
         System.out.println("memberDTO = " + memberDTO);
         return sql.insert("Member.save",memberDTO);
     }
+
+
+    // memberMapper.xml 쿼리를 읽어 MemberService에 MemberDTO객체로 반환함
+    public MemberDTO login(MemberDTO memberDTO) {
+        // selectOne : 조회 결과가 1개 일때
+        return sql.selectOne("Member.login",memberDTO);
+    }
 }
