@@ -1,4 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%--
+   JSTL : (JavaServer Pages Standard Tag Library)은 JSP(JavaServer Pages)에서
+          사용하는 태그 라이브러리로,
+          JSP에서 자주 사용되는 로직을 태그 형태로 제공
+--%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
