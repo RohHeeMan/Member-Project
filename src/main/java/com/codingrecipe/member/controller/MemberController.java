@@ -4,11 +4,13 @@ import com.codingrecipe.member.dto.MemberDTO;
 import com.codingrecipe.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 // RequestMapping으로 선언해 놓고 하단에서는 하위 경로만 써도 된다.
@@ -32,6 +34,8 @@ public class MemberController {
     }
 
     // Save폼에서 전달 받은 데이터를 Post처리 함
+    // @ModelAttribute : 사용자가 요청 시 전달하는 값을 오브젝트(객체) 형태로 매핑해주는 애노테이션이다
+    //                   생성자를 자동으로 만들어주고 Model로 받을수 있도록 만들어 주는 어노테이션이다
     @PostMapping("/member/save")
     public String save(@ModelAttribute MemberDTO memberDTO){
         // return 하기 위해서 Service와 Repository를 만들어 준다.
@@ -81,4 +85,21 @@ public class MemberController {
             return "login";
         }
     }
+
+    // 회원 목록 조회
+    @GetMapping("/member")
+    public String findAll(Model model){
+        // DTO의 List로 받아 온다
+        // 서비스를 통해 리파지터리에서 데이터를 받아와 memberDTOList에 List형태로 받음
+        // memberService로 파라미터 없이 그냥 호출해서 model로 받아 list.jsp로 넘길 것임.
+        List<MemberDTO> memberDTOList = memberService.findAll();
+        // 매개변수로 전달받은 결과를 model.addAttribute("key", "value");
+        // 메소드를 이용해서 view에 전달할 데이터를 key, value 쌍으로 전달함.
+        // model에 추가하여 memberList이름으로 list.jsp로 넘긴다.
+        model.addAttribute("memberList", memberDTOList);
+        return "list";
+    }
+
+
+
 }

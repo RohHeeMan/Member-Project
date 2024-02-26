@@ -17,6 +17,11 @@
            and memberPassword=#{memberPassword}
     </select>
 
+    <!-- parameterType="member" 이 없는 것은 전달할 것이 없으므로 넘길 필요가 없음 -->
+    <!-- 주의 : id="이름" 대소문자가 정확 해야 함 -->
+    <select id="findAll" resultType="member">
+        select * from member_table
+    </select>
 </mapper>
 
 
