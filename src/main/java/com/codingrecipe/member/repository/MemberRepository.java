@@ -42,4 +42,9 @@ public class MemberRepository {
 //        return sql.selectOne("Member.findById", memberDTO);
 //    }
 
+    // 삭제 처리
+    public int delete(Long id) {
+        // id를 넘겨서 처리 한다. int로 받아오는 값은 삭제된 행의 수를 나타낸다
+        return sql.delete("Member.delete",id);
+    }
 }

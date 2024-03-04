@@ -51,4 +51,17 @@ public class MemberService {
 //        return memberRepository.findById(memberDTO);
 //    }
 
+//    public boolean delete(Long id) {
+//        int deleteResult = memberRepository.delete(id);
+//        return deleteResult > 0;
+//    }
+
+    public int delete(Long id) {
+        int deleteResult = memberRepository.delete(id);
+
+        // delete가 삭제된 행의 수를 나타내므로 그냥 값을 넘겨주면 된다.
+        return deleteResult;
+
+    }
+
 }

@@ -142,4 +142,16 @@ public class MemberController {
 //        return "detail";
 //    }
 
+    // 삭제 처리 하기 ( 그냥 리턴값을 받지 않고 처리 할수도 있다 )
+    @GetMapping("/member/delete")
+    public String delete(@RequestParam("id") Long id){
+        int deleteResult = memberService.delete(id);
+        // boolean으로 처리 해도 되고 int로 처리해도 된다.
+        if (deleteResult > 0){
+            // 반드시 뒤에 /(slash)가 있어야 됨. 현재페이지로 다시 돌아옴.
+            return "redirect:/member/";
+        } else {
+            return "redirect:/member/error";
+        }
+    }
 }
