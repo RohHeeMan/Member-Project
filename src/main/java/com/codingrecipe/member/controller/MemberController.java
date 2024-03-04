@@ -3,20 +3,26 @@ package com.codingrecipe.member.controller;
 import com.codingrecipe.member.dto.MemberDTO;
 import com.codingrecipe.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.session.SqlSession;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+
+@Slf4j
+
 @Controller
 // RequestMapping으로 선언해 놓고 하단에서는 하위 경로만 써도 된다.
+// WEB-INF/views/각종 뷰 호출
 //@RequestMapping("/member")
 
-// 롬복을 이용해서 자동으로 생성자 생성
+// 롬복을 이용해서 자동으로 생성자 생성(의존성 주입하기 위해서)
+// 객체로 넘기기 위해
 @RequiredArgsConstructor
 public class MemberController {
     // 의존성 주입, 생성자 주입
@@ -72,6 +78,11 @@ public class MemberController {
 
     // 로그인 구현 ( 로그인의 경우는 세션도 가지고 다녀야 하므로 세션구현 )
     @PostMapping("/member/login")
+    // 사용자가 입력한 자료를 전달 받아 로그인 후 세션을 저장한다.
+    // memberDTO => 사용자가 입력한 값을 전달
+    // memberDTO를 넘겨 받아 ( @RequestParam을 사용해서 처리 할 수 있으나 귀찮으니 DTO로 전달받아 처리함 )
+    // @PostMapping의 경우는 @ModelAttribute를 이용해서 객체를 파라미터로 받을수 있음.
+    // HttpSession을 사용해서 세션을 저장해야 한다.
     public String login(@ModelAttribute MemberDTO memberDTO, HttpSession session){
         // memberDTO 전체를 넘긴다... 필요한 것만 사용하면 되니까.
         boolean loginResult = memberService.login(memberDTO);
@@ -86,20 +97,49 @@ public class MemberController {
         }
     }
 
-    // 회원 목록 조회
-    @GetMapping("/member")
+    // 회원 목록 조회 ( 🎈🎈💕💕 == 중요 ==
+    //                /member/ 경로로 들어오면 요청만을 처리하고
+    //                /member 경로로 들어오는 요청은 처리 하지 않음
+    //                )
+    @GetMapping("/member/")
+    // Model을 이용해서 전달 할 것이다.
     public String findAll(Model model){
-        // DTO의 List로 받아 온다
-        // 서비스를 통해 리파지터리에서 데이터를 받아와 memberDTOList에 List형태로 받음
-        // memberService로 파라미터 없이 그냥 호출해서 model로 받아 list.jsp로 넘길 것임.
+        // 단순히 서비스를 호출 한다.(넘길 파라미터가 없음)
+        // List의 형태로 MemberDTO의 여러가지 결과값을 전달 받는다.
         List<MemberDTO> memberDTOList = memberService.findAll();
         // 매개변수로 전달받은 결과를 model.addAttribute("key", "value");
         // 메소드를 이용해서 view에 전달할 데이터를 key, value 쌍으로 전달함.
-        // model에 추가하여 memberList이름으로 list.jsp로 넘긴다.
-        model.addAttribute("memberList", memberDTOList);
+        // model에 추가하여 memberList이름으로 list.jsp로 memberDTOList를 넘긴다.
+        model.addAttribute("memberList",memberDTOList);
         return "list";
     }
 
+    // 상세 조회 ( /member까지 밖에 없고 그 뒤에 id가 따라오므로 /를 쓰면 안됨 )
+    // 상세 조회 ( 🎈🎈💕💕 == 중요 ==
+    //            /member/ 경로로 들어오면 요청만을 처리하고
+    //            /member 경로로 들어오는 요청은 처리 하지 않음
+    //                )
+    // /member?id=1
 
+     // 상세 조회 : @RequestParam 사용 방법 ( 파라미터를 사용하여 처리 )
+    @GetMapping("/member")
+    // MemberDTO의 id가 Long형태이므로 Long형으로 @RequestParam에 넘겨줘야 함
+    public String findById(@RequestParam(name="id") Long id,Model model){
+        // memberDTO의 형태로 사용자를 찾아서 결과를 받은 후
+        MemberDTO memberDTO = memberService.findById(id);
+        // 모델에 추가해서
+        model.addAttribute("member",memberDTO);
+        // detail.jsp를 호출한다.
+        return "detail";
+    }
+
+//    // 상세 조회 : MemberDTO 사용 방법 ( MemberDTO 객체를 넘겨 처리 )
+//    @GetMapping("/member")
+//    public String findById(@ModelAttribute MemberDTO memberDTO,Model model){
+//        // memberDTO 객체를 전부 넘겨 처리 한다.
+//        MemberDTO memberfindById = memberService.findById(memberDTO);
+//        model.addAttribute("member",memberfindById);
+//        return "detail";
+//    }
 
 }

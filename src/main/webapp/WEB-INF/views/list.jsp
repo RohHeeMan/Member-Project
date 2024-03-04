@@ -29,7 +29,7 @@
 
                     <a href="/member?id=${member.id}">${member.memberEmail}</a>
                 </td>
-                <td>${member.memberPassword}</td>
+                <td>$member.memberPassword$</td>
                 <td>${member.memberName}</td>
                 <td>${member.memberAge}</td>
                 <td>${member.memberMobile}</td>

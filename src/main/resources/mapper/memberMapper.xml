@@ -4,7 +4,7 @@
 
 <mapper namespace="Member">
     <!-- mabatis-config.xml에서 지정한 별칭으로 사용함 : 원래는 전체 경로로 써야함 -->
-    <!-- <insert id="save" parameterType="com.codingrecipe.member.dto.MemberDTO"> -->
+    <!-- <typeAlias type="com.codingrecipe.member.dto.MemberDTO" alias="member"></typeAlias> -->
     <insert id="save" parameterType="member">
         insert into member_table(memberEmail, memberPassword, memberName, memberAge, memberMobile)
         values (#{memberEmail}, #{memberPassword}, #{memberName}, #{memberAge}, #{memberMobile})
@@ -21,6 +21,15 @@
     <!-- 주의 : id="이름" 대소문자가 정확 해야 함 -->
     <select id="findAll" resultType="member">
         select * from member_table
+    </select>
+
+    <!-- 넘어온 id를 가지고 @RequestParam에서 Long으로 넘겼고 그리고 넘기는 타입은 member임 -->
+<!--    <select id="findById" parameterType="Long" resultType="member">-->
+<!--        select * from member_table where id=#{id}-->
+<!--    </select>-->
+
+    <select id="findById" parameterType="member" resultType="member">
+        select * from member_table where id=#{id}
     </select>
 </mapper>
 
