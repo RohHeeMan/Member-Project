@@ -36,6 +36,16 @@
         delete from member_table where id=#{id}
     </select>
 
+    <select id="findByEmail" parameterType="member" resultType="member">
+        select * from member_table where memberEmail=#{memberEmail}
+    </select>
+
+    <select id="update" parameterType="member" resultType="member">
+        update member_table set memberAge = #{memberAge}
+                              , memberMobile = #{memberMobile}
+        where id = #{id}
+    </select>
+
 </mapper>
 
 

@@ -47,4 +47,14 @@ public class MemberRepository {
         // id를 넘겨서 처리 한다. int로 받아오는 값은 삭제된 행의 수를 나타낸다
         return sql.delete("Member.delete",id);
     }
+
+    public MemberDTO findByEmail(String loginEmail) {
+        // 넘겨받은 loginEmail을 이용하여 조회하고 MemberDTO로 넘겨 받는다.
+        return sql.selectOne("Member.findByEmail", loginEmail);
+    }
+
+
+    public int update(MemberDTO memberDTO) {
+        return sql.update("Member.update", memberDTO);
+    }
 }

@@ -154,4 +154,32 @@ public class MemberController {
             return "redirect:/member/error";
         }
     }
+
+    // 업데이트 화면 불러오기
+    @GetMapping("/member/update")
+    // 누구를 수정할지 알아야 하므로 로그인시 저장한 세션정보를 가져온다.
+    public String updateForm(HttpSession session,Model model){
+        // 로그인시 저장된 세션에서 이메일을 가지고 불러올 사람을 특정함
+        String loginEmail = (String) session.getAttribute("loginEmail");
+        // DTO형태로 전달 받아서
+        MemberDTO memberDTO = memberService.findByEmail(loginEmail);
+        // 모델에 등록하고
+        model.addAttribute("member", memberDTO);
+        // 화면에 보여준다.
+        return "update";
+    }
+
+    // 수정처리 하기
+    @PostMapping("/member/update")
+    public String update(@ModelAttribute MemberDTO memberDTO){
+        // memberService 호출하여 처리하고 결과 받음
+        boolean updateResult = memberService.update(memberDTO);
+        if (updateResult) {
+            return "redirect:/member?id=" + memberDTO.getId();
+        } else {
+            return "index";
+        }
+    }
+
+
 }

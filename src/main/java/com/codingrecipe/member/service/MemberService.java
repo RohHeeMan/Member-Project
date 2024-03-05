@@ -64,4 +64,18 @@ public class MemberService {
 
     }
 
+    public MemberDTO findByEmail(String loginEmail) {
+        return memberRepository.findByEmail(loginEmail);
+    }
+
+
+    public boolean update(MemberDTO memberDTO) {
+        // update 후 결과값 리턴
+        int updateResult = memberRepository.update(memberDTO);
+        if (updateResult > 0 ){
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
